@@ -3,7 +3,7 @@ name: Build WASM
 on:
   push:
     branches:
-      - workflows
+      - main
 
 env:
   EM_VERSION: 2.0.24
