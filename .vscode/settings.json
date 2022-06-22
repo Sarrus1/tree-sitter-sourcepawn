@@ -3,6 +3,8 @@
     "editor.formatOnSave": false
   },
   "files.associations": {
-    "wctype.h": "c"
-  }
+    "wctype.h": "c",
+    "parser.h": "c"
+  },
+  "editor.formatOnSave": true
 }
