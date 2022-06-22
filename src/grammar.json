@@ -3705,8 +3705,11 @@
           ]
         },
         {
-          "type": "SYMBOL",
-          "name": "_old_type_colon"
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": ":"
+          }
         }
       ]
     },
@@ -4970,8 +4973,8 @@
             }
           },
           {
-            "type": "STRING",
-            "value": ":"
+            "type": "SYMBOL",
+            "name": "_ternary_colon"
           },
           {
             "type": "FIELD",
@@ -6986,7 +6989,7 @@
     },
     {
       "type": "SYMBOL",
-      "name": "_old_type_colon"
+      "name": "_ternary_colon"
     }
   ],
   "inline": [

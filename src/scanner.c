@@ -4,7 +4,7 @@
 enum TokenType
 {
   AUTOMATIC_SEMICOLON,
-  OLD_TYPE_COLON
+  TERNARY_COLON,
 };
 
 void *tree_sitter_sourcepawn_external_scanner_create() { return NULL; }
@@ -131,29 +131,13 @@ static bool scan_automatic_semicolon(TSLexer *lexer)
   return true;
 }
 
-static bool scan_old_type_colon(TSLexer *lexer)
+static bool ternary_colon(TSLexer *lexer)
 {
-  // if (lexer->lookahead == '?')
-  // {
-  //     question_mark = true;
-  //     skip(lexer);
-  // }
-
-  // if (iswalpha(lexer->lookahead) || lexer->lookahead == '_')
-  // {
-  //     skip(lexer);
-  //     while (iswalnum(lexer->lookahead) || lexer->lookahead == '_')
-  //     {
-  //         skip(lexer);
-  //     }
-  //     if (lexer->lookahead == ':')
-  //     {
-  //         advance(lexer);
-  //         return !question_mark && lexer->lookahead != ':';
-  //     }
-  // }
-  lexer->result_symbol = OLD_TYPE_COLON;
-
+  lexer->result_symbol = TERNARY_COLON;
+  while (iswspace(lexer->lookahead))
+  {
+    skip(lexer);
+  }
   if (lexer->lookahead == ':')
   {
     advance(lexer);
@@ -166,14 +150,14 @@ static bool scan_old_type_colon(TSLexer *lexer)
 bool tree_sitter_sourcepawn_external_scanner_scan(void *payload, TSLexer *lexer,
                                                   const bool *valid_symbols)
 {
-  if (valid_symbols[AUTOMATIC_SEMICOLON] && lexer->lookahead != ':')
+  if (valid_symbols[AUTOMATIC_SEMICOLON] && lexer->lookahead != ':' && lexer->lookahead != '?')
   {
     return scan_automatic_semicolon(lexer);
   }
 
-  if (valid_symbols[OLD_TYPE_COLON])
+  if (valid_symbols[TERNARY_COLON])
   {
-    return scan_old_type_colon(lexer);
+    return ternary_colon(lexer);
   }
 
   return false;
