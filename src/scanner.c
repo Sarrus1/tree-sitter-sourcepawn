@@ -4,6 +4,7 @@
 enum TokenType
 {
     AUTOMATIC_SEMICOLON,
+    OLD_TYPE_COLON
 };
 
 void *tree_sitter_sourcepawn_external_scanner_create() { return NULL; }
@@ -130,12 +131,59 @@ static bool scan_automatic_semicolon(TSLexer *lexer)
     return true;
 }
 
+static bool scan_old_type_colon(TSLexer *lexer)
+{
+    lexer->result_symbol = OLD_TYPE_COLON;
+    bool question_mark = false;
+
+    for (;;)
+    {
+        if (!iswspace(lexer->lookahead))
+        {
+            break;
+        }
+        skip(lexer);
+    }
+
+    // if (lexer->lookahead == '?')
+    // {
+    //     question_mark = true;
+    //     skip(lexer);
+    // }
+
+    // if (iswalpha(lexer->lookahead) || lexer->lookahead == '_')
+    // {
+    //     skip(lexer);
+    //     while (iswalnum(lexer->lookahead) || lexer->lookahead == '_')
+    //     {
+    //         skip(lexer);
+    //     }
+    //     if (lexer->lookahead == ':')
+    //     {
+    //         advance(lexer);
+    //         return !question_mark && lexer->lookahead != ':';
+    //     }
+    // }
+
+    if (lexer->lookahead == ':')
+    {
+        advance(lexer);
+        return lexer->lookahead != ':';
+    }
+    return false;
+}
+
 bool tree_sitter_sourcepawn_external_scanner_scan(void *payload, TSLexer *lexer,
                                                   const bool *valid_symbols)
 {
     if (valid_symbols[AUTOMATIC_SEMICOLON])
     {
         return scan_automatic_semicolon(lexer);
+    }
+
+    else if (valid_symbols[OLD_TYPE_COLON])
+    {
+        return scan_old_type_colon(lexer);
     }
 
     return false;

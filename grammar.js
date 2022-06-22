@@ -24,7 +24,7 @@ const PREC = {
 module.exports = grammar({
   name: "sourcepawn",
 
-  externals: ($) => [$._automatic_semicolon],
+  externals: ($) => [$._automatic_semicolon, $._old_type_colon],
 
   extras: ($) => [
     /\s|\\\r?\n/,
@@ -721,10 +721,7 @@ module.exports = grammar({
     type: ($) => prec(1, choice($.builtin_type, $.symbol, $.any_type)),
 
     old_type: ($) =>
-      seq(
-        choice($.old_builtin_type, $.symbol, $.any_type),
-        token.immediate(":")
-      ),
+      seq(choice($.old_builtin_type, $.symbol, $.any_type), $._old_type_colon),
 
     dimension: ($) => seq("[", "]"),
 
